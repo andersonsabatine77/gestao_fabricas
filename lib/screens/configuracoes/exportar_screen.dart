@@ -1,7 +1,10 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/backup/backup_service.dart';
-import '../../core/backup/exportar_arquivo.dart';
 import '../../models/fabrica.dart';
 import '../../models/linha.dart';
 import '../../repositories/fabrica_repository.dart';
@@ -86,14 +89,22 @@ class _ExportarScreenState extends State<ExportarScreen> {
         linhaId: _linha?.id,
       );
       final nome = 'gestao_fabricas_${_escopo.name}_${_carimboHora()}.json';
-      await compartilharTexto(
-        conteudo: json,
-        nomeArquivo: nome,
-        assunto: 'Dados — Gestão de Fábricas',
+      final caminho = await FilePicker.saveFile(
+        dialogTitle: 'Salvar arquivo de dados',
+        fileName: nome,
+        type: FileType.custom,
+        allowedExtensions: ['json'],
+        bytes: Uint8List.fromList(utf8.encode(json)),
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Arquivo de exportação gerado.')),
+        SnackBar(
+          content: Text(
+            caminho == null
+                ? 'Exportação cancelada.'
+                : 'Dados exportados com sucesso.',
+          ),
+        ),
       );
     } catch (e) {
       if (!mounted) return;

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,6 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
       resultado = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['json'],
-        withData: true,
       );
     } catch (e) {
       _avisar('Não foi possível abrir o seletor de arquivos: $e');
@@ -36,9 +36,11 @@ class _ConfiguracoesScreenState extends State<ConfiguracoesScreen> {
     }
     if (resultado == null) return; // cancelado
 
-    final bytes = resultado.files.single.bytes;
-    if (bytes == null) {
-      _avisar('Não foi possível ler o arquivo selecionado.');
+    final Uint8List bytes;
+    try {
+      bytes = await resultado.files.single.readAsBytes();
+    } catch (e) {
+      _avisar('Não foi possível ler o arquivo selecionado: $e');
       return;
     }
 
