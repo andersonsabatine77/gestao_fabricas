@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Force | Select-Object Name, Length, Mode; Write-Output \"---FLUTTER---\"; \\(Get-Command flutter -ErrorAction SilentlyContinue\\).Source; Write-Output \"---DART---\"; \\(Get-Command dart -ErrorAction SilentlyContinue\\).Source)",
+      "PowerShell(flutter pub add sqflite path uuid 2>&1)",
+      "Bash(ls \"/c/pub-cache/hosted/pub.dev/file_picker-11.0.2/lib/src/api/\" 2>/dev/null; echo \"---README usage---\"; sed -n '1,120p' \"/c/pub-cache/hosted/pub.dev/file_picker-11.0.2/README.md\" | grep -nEi \"pickFiles|FilePicker|openFile|readFile|import |await|FilePickerResult|bytes|=>\" | head -40)",
+      "PowerShell(& \"$PWD\\\\android\\\\gradlew.bat\" -p \"$PWD\\\\android\" assembleRelease --no-daemon --stacktrace 2>&1 | Select-Object -Last 50)",
+      "PowerShell(java \"$PWD\\\\build\\\\SelTest.java\" 2>&1 | Select-Object -First 15)",
+      "PowerShell(flutter pub get 2>&1 | Select-Object -Last 8; Write-Output \"=== versões resolvidas ===\"; Select-String -Path pubspec.lock -Pattern \"^  \\(share_plus|win32|file_picker\\):\" -Context 0,3 | ForEach-Object { $_.Line; \\($_.Context.PostContext | Select-String 'version:'\\) })",
+      "Bash(cd \"/c/pub-cache/hosted/pub.dev/share_plus-10.1.4/lib\" 2>/dev/null; echo \"=== exports/classes ===\"; grep -rnE \"class Share|class SharePlus|class ShareParams|shareXFiles|ShareResult\" *.dart src/*.dart 2>/dev/null | grep -iE \"class Share|class SharePlus|class ShareParams|shareXFiles\" | head -20)",
+      "Bash(echo \"=== file_picker 11.0.2 android/build.gradle ===\"; cat \"/c/pub-cache/hosted/pub.dev/file_picker-11.0.2/android/build.gradle\" 2>/dev/null | grep -nE \"kotlin|KGP|plugin|namespace|compileSdk|JavaVersion|jvmTarget|apply\" | head -30; echo; echo \"=== share_plus 10.1.4 android/build.gradle ===\"; cat \"/c/pub-cache/hosted/pub.dev/share_plus-10.1.4/android/build.gradle\" 2>/dev/null | grep -nE \"kotlin|plugin|namespace|compileSdk|apply\" | head -30)"
+    ]
+  }
+}
